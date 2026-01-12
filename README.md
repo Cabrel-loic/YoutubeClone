@@ -2,20 +2,13 @@
 
 A Django-based video sharing platform that mimics core YouTube functionality. Built with Python, Django, and ImageKit for video processing and storage.
 
-## Table of Contents
+## Repository
 
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Prerequisites](#prerequisites)
-- [Installation & Setup](#installation--setup)
-- [Configuration](#configuration)
-- [Running the Project](#running-the-project)
-- [Project Structure](#project-structure)
-- [API Endpoints](#api-endpoints)
-- [Database Models](#database-models)
-- [Completed Features](#completed-features)
-- [Features In Progress / TODO](#features-in-progress--todo)
-- [Troubleshooting](#troubleshooting)
+**GitHub**: [Cabrel-loic/YoutubeClone](https://github.com/Cabrel-loic/YoutubeClone)
+
+**Clone Options:**
+- **HTTPS**: `https://github.com/Cabrel-loic/YoutubeClone.git`
+- **SSH**: `git@github.com:Cabrel-loic/YoutubeClone.git`
 
 ## Features
 
@@ -130,9 +123,16 @@ Before you begin, ensure you have the following installed:
 
 ### 1. Clone the Repository
 
+**Using HTTPS:**
 ```bash
-git clone <repository-url>
-cd "Youtube Clone"
+git clone https://github.com/Cabrel-loic/YoutubeClone.git
+cd YoutubeClone
+```
+
+**Using SSH:**
+```bash
+git clone git@github.com:Cabrel-loic/YoutubeClone.git
+cd YoutubeClone
 ```
 
 ### 2. Create Virtual Environment
@@ -164,7 +164,7 @@ pip install -r requirements.txt
 
 Or if using `uv`:
 ```bash
-uv pip install -r requirements.txt
+uv add -r requirements.txt
 ```
 
 ### 4. Create Environment Configuration File
@@ -234,21 +234,6 @@ DATABASES = {
 
 ### Static Files Configuration
 
-Static files (CSS, JS, Images) are stored in:
-```
-youtube/static/
-├── css/
-│   ├── auth.css
-│   ├── base.css
-│   ├── buttons.css
-│   ├── forms.css
-│   ├── messages.css
-│   ├── navbar.css
-│   ├── upload.css
-│   ├── variables.css
-│   ├── videoplayer.css
-│   └── videos.css
-```
 
 ### Upload Size Limits
 
@@ -263,13 +248,13 @@ youtube/static/
 
 ```bash
 cd youtube
-python manage.py migrate
+uv run manage.py migrate
 ```
 
 ### 2. Create Superuser (Admin Account)
 
 ```bash
-python manage.py createsuperuser
+uv run manage.py createsuperuser
 ```
 
 Follow the prompts to create an admin account.
@@ -282,77 +267,6 @@ python manage.py runserver
 
 The server will start at `http://localhost:8000`
 
-### 4. Access the Application
-
-- **Main Site**: http://localhost:8000/
-- **Admin Panel**: http://localhost:8000/admin/
-- **Register**: http://localhost:8000/accounts/register/
-- **Login**: http://localhost:8000/accounts/login/
-
-## Project Structure
-
-```
-youtube/
-├── manage.py                          # Django management script
-├── youtube/                           # Project configuration
-│   ├── settings.py                    # Django settings
-│   ├── urls.py                        # Main URL configuration
-│   ├── asgi.py                        # ASGI configuration
-│   └── wsgi.py                        # WSGI configuration
-├── accounts/                          # User authentication app
-│   ├── models.py                      # User-related models
-│   ├── views.py                       # Auth views (Register, Login)
-│   ├── forms.py                       # Auth forms (CustomUserCreationForm)
-│   ├── urls.py                        # Auth URLs
-│   ├── admin.py                       # Admin panel config
-│   └── templates/
-│       └── accounts/
-│           ├── login.html
-│           ├── register.html
-│           └── logged_out.html
-├── videos/                            # Video management app
-│   ├── models.py                      # Video & VideoLike models
-│   ├── views.py                       # Video views
-│   ├── forms.py                       # Video forms (VideoUploadForm)
-│   ├── urls.py                        # Video URLs
-│   ├── imagekit_client.py             # ImageKit API integration
-│   ├── admin.py                       # Admin panel config
-│   └── templates/
-│       └── videos/
-│           ├── list.html              # Homepage - video grid
-│           ├── detail.html            # Video detail page
-│           ├── upload.html            # Upload form page
-│           └── channel.html           # Creator channel page
-├── templates/
-│   └── base.html                      # Base template
-└── static/
-    └── css/                           # Stylesheets
-```
-
-## API Endpoints
-
-### Video Endpoints
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|----------------|
-| GET | `/` | List all videos | No |
-| GET | `/<video_id>/` | Get video details | No |
-| GET | `/channel/<username>/` | Get user's videos | No |
-| GET | `/upload/` | Upload form page | Yes |
-| POST | `/upload/submit/` | Submit video upload | Yes |
-| POST | `/<video_id>/delete/` | Delete video | Yes (Owner) |
-| POST | `/<video_id>/vote/` | Like/Dislike video | Yes |
-
-### Account Endpoints
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|----------------|
-| GET | `/accounts/register/` | Registration form | No |
-| POST | `/accounts/register/` | Submit registration | No |
-| GET | `/accounts/login/` | Login form | No |
-| POST | `/accounts/login/` | Submit login | No |
-| GET | `/accounts/logout/` | Logout | Yes |
-
 ## Database Models
 
 ### User Model
@@ -361,39 +275,6 @@ Uses Django's built-in `User` model with extensions:
 - email
 - password (hashed)
 - first_name, last_name (optional)
-
-### Video Model
-```python
-Video:
-  - user (ForeignKey to User)
-  - title (CharField, max 200)
-  - description (TextField, optional)
-  - file_id (CharField) - ImageKit file ID
-  - video_url (URLField) - ImageKit video URL
-  - thumbnail_url (URLField, optional)
-  - views (PositiveIntegerField, default: 0)
-  - likes (PositiveIntegerField, default: 0)
-  - dislikes (PositiveIntegerField, default: 0)
-  - created_at (DateTimeField, auto)
-  - updated_at (DateTimeField, auto)
-  
-  Properties:
-  - display_thumbnail_url: Returns custom or auto-generated thumbnail
-  - generated_thumbnail_url: Generates thumbnail from video
-  - streaming_url: Returns optimized streaming URL
-```
-
-### VideoLike Model
-```python
-VideoLike:
-  - user (ForeignKey to User)
-  - video (ForeignKey to Video)
-  - value (SmallIntegerField) - LIKE (1) or DISLIKE (-1)
-  - created_at (DateTimeField, auto)
-  
-  Constraints:
-  - unique_together: (user, video) - One vote per user per video
-```
 
 ## Completed Features
 
@@ -504,16 +385,6 @@ VideoLike:
 
 ## Troubleshooting
 
-### Database Connection Error
-
-**Error**: `django.db.utils.OperationalError: (1045, "Access denied for user 'root'@'localhost'"`
-
-**Solution**:
-1. Verify MySQL is running
-2. Check credentials in `.env` file
-3. Ensure database exists: `SHOW DATABASES;`
-4. Verify user permissions in MySQL
-
 ### ImageKit Upload Error
 
 **Error**: `IMAGEKIT_PRIVATE_KEY or IMAGEKIT_PUBLIC_KEY not found`
@@ -524,15 +395,6 @@ VideoLike:
 3. Add to `.env` file
 4. Restart Django server
 
-### Migration Error
-
-**Error**: `django.db.utils.ProgrammingError: Table does not exist`
-
-**Solution**:
-```bash
-python manage.py migrate
-```
-
 ### Port Already in Use
 
 **Error**: `OSError: [Errno 48] Address already in use`
@@ -541,22 +403,13 @@ python manage.py migrate
 ```bash
 python manage.py runserver 8001  # Use different port
 ```
-
-### Video Upload Size Limit
-
-**Error**: `Request entity too large`
-
-**Solution**:
-- Compress video to under 100 MB
-- Check `FILE_UPLOAD_MAX_MEMORY_SIZE` in settings.py
-
 ### Static Files Not Loading
 
 **Error**: CSS/JS files returning 404
 
 **Solution**:
 ```bash
-python manage.py collectstatic
+uv run manage.py collectstatic
 ```
 
 ## Development Notes
@@ -568,34 +421,13 @@ python manage.py collectstatic
 3. Create views (`views.py`)
 4. Create/update templates
 5. Add URLs to `urls.py`
-6. Create migrations: `python manage.py makemigrations`
-7. Apply migrations: `python manage.py migrate`
+6. Create migrations: `uv run manage.py makemigrations`
+7. Apply migrations: `uv run manage.py migrate`
 8. Test thoroughly
 9. Update this README
 
 ### Running Tests
 
 ```bash
-python manage.py test
+uv run manage.py test
 ```
-
-### Making Migrations
-
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
-
-### Admin Panel
-
-Access at `/admin/` to manage:
-- Users
-- Videos
-- Video Likes
-- Permissions
-
----
-
-**Last Updated**: January 12, 2026
-**Version**: 0.1.0
-**Status**: In Active Development
