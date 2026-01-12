@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ channel_name }} - Youtube Clone{% endblock title %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/videos.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="channel-header">
+        <div class="channel-header-avatar">{{ channel_username|slice:":1" }}</div>
+        <div class="channel-header-info">
+            <h1 class="channel-title">{{ channel_username }}</h1>
+            <p class="channel-subtitle">Welcom Back {{ channel_username }}</p>
+        </div>
+        <div class="channel-header-actions">
+            {% if request.user.username == channel_username %}
+            <a href="{% url 'videos:upload' %}" class="btn btn-secondary">
+                <span>＋</span>
+                <span>Upload video</span>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if videos %}
+        <div class="video-grid">
+            {% for video in videos %}
+                <a href="{% url 'videos:detail' video.id %}" class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="{{ video.display_thumbnail_url }}" alt="{{ video.title }}" loading="lazy">
+                        <span class="play-icon">▶</span>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">{{ video.title }}</h3>
+                        <p class="video-meta">{{ video.views }} views | {{ video.created_at|date:"M d, Y" }}</p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <span class="empty-icon">🎥</span>
+            <h2>No videos yet</h2>
+            <p>This channel hasn't uploaded any video yet</p>
+        </div>
+    {% endif %}
+{% endblock content %}

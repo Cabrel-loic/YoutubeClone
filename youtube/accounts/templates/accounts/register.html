@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Create an account - Youtube Clone{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1>Create an account</h1>
+            <p>Sign up to continue with Youtube clone</p>
+        </div>
+        <form method="post" class="auth-form" action="">
+            {% csrf_token %}
+            {% if form.errors %}
+            <ul class="error-list">
+                {% for field in form %}
+                {% for error in field.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <div class="form-group">
+                <label for="id_username">Username</label>
+                <input 
+                type="text" 
+                name="username" 
+                id="id_username" 
+                class="form-input" 
+                placeholder="Choose a username" 
+                value="{{ form.username.value|default:'' }}" 
+                maxlength="150"
+                required 
+                autofocus
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="id_email">Email</label>
+                <input 
+                type="text" 
+                name="email" 
+                id="id_email" 
+                class="form-input" 
+                placeholder="Enter your email address" 
+                value="{{ form.email.value|default:'' }}" 
+                required 
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password1">Password</label>
+                <input 
+                type="password" 
+                name="password1" 
+                id="id_password1" 
+                class="form-input" 
+                placeholder="Enter a password" 
+                required>
+                <span class="help-text">
+                    Your password must contain at least 8 characters and should not be entirely numeric.
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="id_password2">Confirm Password</label>
+                <input 
+                type="password" 
+                name="password2" 
+                id="id_password2" 
+                class="form-input" 
+                placeholder="Confirm your password" 
+                required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-submit">Create account</button>
+            <div class="auth-footer">
+                <p class="auth-footer">Have an account? <a href="{% url 'accounts:login' %}">Sign In</a></p>
+            </div>
+        </form>
+    </div>
+{% endblock content%}

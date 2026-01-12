@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Video - Youtube Clone{% endblock title %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/videos.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+
+<div class="page-header">
+    <div class="page-header-left">
+        <h1 class="page-title">Explore videos</h1>
+        {% comment %} <p class="page-subtitle">Watch, learn, and share your own content with the community.</p> {% endcomment %}
+    </div>
+    <div class="page-header-right">
+        <a href="{% url 'videos:upload' %}" class="btn btn-primary">
+            <span>＋</span>
+            <span>Upload</span>
+        </a>
+    </div>
+</div>
+
+<div class="video-grid">
+    {% for video in videos %}
+        <a href="{% url 'videos:detail' video.id %}" class="video-card">
+            <div class="video-thumbnail">
+                <img src="{{ video.display_thumbnail_url }}" alt="{{ video.title }}" loading="lazy">
+                <span class="play-icon">▶</span>
+            </div>
+            <div class="video-info">
+                <h3 class="video-title">{{ video.title }}</h3>
+                
+                <p class="video-meta">{{ video.user.username }} | {{ video.views }} views</p>
+            </div>
+        </a>
+    {% endfor %}
+</div>
+{% endblock content %}

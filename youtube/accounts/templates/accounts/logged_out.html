@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Logged Out - Youtube Clone{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="success-container">
+        <h1>Logged Out</h1>
+        <p>You have been logged out successfully.</p>
+        <a href="{% url 'accounts:login' %}" class="btn btn-primary">Log In Again</a>
+    </div>
+{% endblock content%}
